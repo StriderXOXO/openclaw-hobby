@@ -1,0 +1,25 @@
+# OpenClaw Gateway — user service
+# Install to: ~/.config/systemd/user/openclaw-gateway.service
+# Enable: systemctl --user enable openclaw-gateway
+# Start: systemctl --user start openclaw-gateway
+# IMPORTANT: Run `loginctl enable-linger <user>` so service persists after SSH logout
+
+[Unit]
+Description=OpenClaw Gateway
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/node %h/openclaw/dist/entry.js gateway --port 18789
+Restart=always
+RestartSec=5
+KillMode=process
+Environment=HOME=%h
+Environment=OPENCLAW_GATEWAY_PORT=18789
+Environment=OPENCLAW_SYSTEMD_UNIT=openclaw-gateway.service
+Environment=OPENCLAW_SERVICE_MARKER=openclaw
+Environment=OPENCLAW_SERVICE_KIND=gateway
+
+[Install]
+WantedBy=default.target

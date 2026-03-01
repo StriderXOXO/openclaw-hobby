@@ -1,0 +1,20 @@
+# Watchdog — system service
+# Install to: /etc/systemd/system/hobby-watchdog.service
+# Enable: systemctl enable hobby-watchdog
+# Start: systemctl start hobby-watchdog
+
+[Unit]
+Description=OpenClaw Hobby System Watchdog
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /root/.openclaw/skills/watchdog/scripts/watchdog.py daemon
+Restart=always
+RestartSec=30
+Environment=TZ=Asia/Shanghai
+Environment=XDG_RUNTIME_DIR=/run/user/0
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,39 @@
+{
+  "models": {
+    "providers": {
+      "your-provider": {
+        "api": "anthropic-messages",
+        "endpoint": "YOUR_LLM_ENDPOINT",
+        "apiKey": "YOUR_API_KEY",
+        "authHeader": true
+      }
+    },
+    "defaults": {
+      "model": "YOUR_MODEL_NAME",
+      "provider": "your-provider"
+    }
+  },
+  "agents": {
+    "defaults": {
+      "heartbeat": {
+        "every": "10m",
+        "target": "feishu",
+        "session": "isolated",
+        "activeHours": {"start": "07:00", "end": "23:00"}
+      }
+    }
+  },
+  "gateway": {
+    "mode": "local",
+    "port": 18789,
+    "auth": {
+      "token": "GENERATE_WITH_openssl_rand_-hex_32"
+    }
+  },
+  "channels": {
+    "feishu": {
+      "appId": "YOUR_FEISHU_APP_ID",
+      "appSecret": "YOUR_FEISHU_APP_SECRET"
+    }
+  }
+}

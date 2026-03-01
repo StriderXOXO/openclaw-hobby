@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Credentials & secrets
+*.pem
+*.key
+token.json
+client_secret_*.json
+credentials.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# SQLite databases
+*.db
+
+# Workspace state (user-specific runtime data)
+workspace/
+
+# Logs
+*.log
+logs/
+
+# Node (for OpenClaw)
+node_modules/

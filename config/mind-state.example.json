@@ -1,0 +1,20 @@
+{
+  "heartbeat_count": 0,
+  "last_tick": null,
+  "sharing": {
+    "last_share": null,
+    "items_shared_today": 0,
+    "max_daily": 15,
+    "cooldown_hours": 2
+  },
+  "user_schedule": {
+    "timezone": "Asia/Shanghai",
+    "busy_hours": [9, 10, 11, 14, 15],
+    "preferred_windows": [7, 12, 16, 19]
+  },
+  "recent_observations": [],
+  "content_preferences": {
+    "topics": {},
+    "formats": {}
+  }
+}

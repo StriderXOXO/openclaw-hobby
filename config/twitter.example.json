@@ -1,0 +1,22 @@
+{
+  "feishu_app_id": "YOUR_FEISHU_APP_ID",
+  "feishu_app_secret": "YOUR_FEISHU_APP_SECRET",
+  "feishu_app_token": "YOUR_FEISHU_APP_TOKEN",
+  "feishu_table_id": "YOUR_TWITTER_TABLE_ID",
+  "api_key": "YOUR_TWITTER_API_KEY",
+  "seed_accounts": [
+    {"username": "karpathy"},
+    {"username": "sama"},
+    {"username": "ylecun"},
+    {"username": "jimkeller"},
+    {"username": "elaborator"}
+  ],
+  "seed_topics": [
+    "AI", "machine learning", "LLM", "agents", "robotics", "open source"
+  ],
+  "login_cookies": null,
+  "proxy": null,
+  "cycle_interval_hours_min": 1.5,
+  "cycle_interval_hours_max": 3,
+  "max_tweets_per_cycle": 20
+}

@@ -1,0 +1,21 @@
+{
+  "feishu_app_id": "YOUR_FEISHU_APP_ID",
+  "feishu_app_secret": "YOUR_FEISHU_APP_SECRET",
+  "feishu_app_token": "YOUR_FEISHU_APP_TOKEN",
+  "feishu_table_id": "YOUR_YOUTUBE_TABLE_ID",
+  "token_path": "~/.openclaw/workspace/youtube-hobby/token.json",
+  "client_secret_path": "~/.openclaw/workspace/youtube-hobby/client_secret.json",
+  "transcript_proxy_url": "http://YOUR_GPU_SERVER:9876/youtube/transcript",
+  "transcript_proxy_token": "YOUR_WHISPER_API_TOKEN",
+  "seed_channels": [
+    "UC_x5XG1OV2P6uZZ5FSM9Ttw",
+    "UCZFipeZtQM5HKerJ0-Hg6CQ"
+  ],
+  "seed_topics": [
+    "AI", "machine learning", "robotics", "programming"
+  ],
+  "cycle_interval_hours_min": 4,
+  "cycle_interval_hours_max": 6,
+  "max_videos_per_cycle": 5,
+  "subtitle_languages": ["zh-Hans", "zh", "en"]
+}

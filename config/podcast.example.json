@@ -1,0 +1,37 @@
+{
+  "feishu_app_id": "YOUR_FEISHU_APP_ID",
+  "feishu_app_secret": "YOUR_FEISHU_APP_SECRET",
+  "feishu_app_token": "YOUR_FEISHU_APP_TOKEN",
+  "feishu_table_id": "YOUR_PODCAST_TABLE_ID",
+  "whisper_endpoint": "http://YOUR_GPU_SERVER:9876/transcribe_url",
+  "whisper_token": "YOUR_WHISPER_API_TOKEN",
+  "subscriptions": [
+    {
+      "name": "Lex Fridman Podcast",
+      "rss_url": "https://lexfridman.com/feed/podcast/",
+      "language": "en",
+      "tags": ["AI", "science", "philosophy"]
+    },
+    {
+      "name": "硅谷101",
+      "rss_url": "https://feeds.fireside.fm/silicon-valley-101/rss",
+      "language": "zh",
+      "tags": ["tech", "startups", "silicon-valley"]
+    },
+    {
+      "name": "Acquired",
+      "rss_url": "https://feeds.pacific-content.com/acquired",
+      "language": "en",
+      "tags": ["business", "tech-history"]
+    },
+    {
+      "name": "What's Next|科技早知道",
+      "rss_url": "https://feeds.fireside.fm/whatsnext/rss",
+      "language": "zh",
+      "tags": ["tech", "trends"]
+    }
+  ],
+  "cycle_interval_hours_min": 2,
+  "cycle_interval_hours_max": 4,
+  "max_episodes_per_cycle": 3
+}

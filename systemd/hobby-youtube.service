@@ -1,0 +1,22 @@
+# YouTube Hobby Daemon — system service
+# Install to: /etc/systemd/system/hobby-youtube.service
+# Enable: systemctl enable hobby-youtube
+# Start: systemctl start hobby-youtube
+
+[Unit]
+Description=OpenClaw YouTube Hobby Daemon
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /root/.openclaw/skills/youtube-hobby/scripts/youtube-hobby.py daemon
+Restart=always
+RestartSec=60
+Environment=TZ=Asia/Shanghai
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=-/root/.openclaw/workspace/youtube-hobby/.env
+WorkingDirectory=/root/.openclaw/skills/youtube-hobby/scripts
+
+[Install]
+WantedBy=multi-user.target

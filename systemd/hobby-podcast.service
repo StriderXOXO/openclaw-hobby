@@ -1,0 +1,22 @@
+# Podcast Hobby Daemon — system service
+# Install to: /etc/systemd/system/hobby-podcast.service
+# Enable: systemctl enable hobby-podcast
+# Start: systemctl start hobby-podcast
+
+[Unit]
+Description=OpenClaw Podcast Hobby Daemon
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /root/.openclaw/skills/podcast-hobby/scripts/podcast-hobby.py daemon
+Restart=always
+RestartSec=60
+Environment=TZ=Asia/Shanghai
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=-/root/.openclaw/workspace/podcast-hobby/.env
+WorkingDirectory=/root/.openclaw/skills/podcast-hobby/scripts
+
+[Install]
+WantedBy=multi-user.target

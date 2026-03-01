@@ -1,0 +1,22 @@
+# Twitter Hobby Daemon — system service
+# Install to: /etc/systemd/system/hobby-twitter.service
+# Enable: systemctl enable hobby-twitter
+# Start: systemctl start hobby-twitter
+
+[Unit]
+Description=OpenClaw Twitter Hobby Daemon
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /root/.openclaw/skills/twitter-hobby/scripts/twitter-hobby.py daemon
+Restart=always
+RestartSec=30
+Environment=TZ=Asia/Shanghai
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=-/root/.openclaw/workspace/twitter-hobby/.env
+WorkingDirectory=/root/.openclaw/workspace/twitter-hobby
+
+[Install]
+WantedBy=multi-user.target
