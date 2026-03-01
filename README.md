@@ -1,6 +1,41 @@
 # openclaw-hobby
 
-**基于 [OpenClaw](https://github.com/openclaw/openclaw) 的自主兴趣内容策展系统 -- 7x24 无人值守采集、智能分析、心跳驱动主动分享。**
+**治愈你的信息焦虑。** 让 AI 替你听完 2 小时的播客，只把最精华的 5 分钟推给你。
+
+> Your AI reads the internet so you don't have to.
+> Monitors Podcasts, YouTube, and Twitter 24/7 — analyzes with AI — shares what matters, when it matters.
+
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://python.org)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Tests: 91 passed](https://img.shields.io/badge/tests-91%20passed-brightgreen.svg)]()
+
+---
+
+## 这是给谁用的？
+
+- **忙碌的开发者/创业者** — 想跟踪技术趋势但没时间每天刷 feed
+- **播客重度用户** — 订阅了 20 个播客但每周只听 2 个
+- **信息焦虑患者** — 怕错过重要内容，又讨厌通知轰炸
+- **自建狂魔** — 不信任算法推荐，想要自己掌控信息源
+
+---
+
+## 为什么选 openclaw-hobby？
+
+- **不再错过重要内容** — 7x24 替你监控 Podcast / YouTube / Twitter，你睡觉它不睡
+- **只看精华，不看噪音** — AI 读完全文/听完全集，提炼摘要和亮点
+- **在对的时间收到推送** — 不是机械定时，而是 AI 判断「现在合适吗？这条值得吗？」
+- **越用越懂你** — 转发一篇文章，系统自动调整你的兴趣偏好
+
+### vs 其他方案
+
+| | FreshRSS | n8n | TrendRadar | **openclaw-hobby** |
+|---|---------|-----|------------|-----|
+| 数据源 | RSS | 自定义工作流 | 多平台关键词 | Podcast + YouTube + Twitter |
+| AI 分析 | 无 | 需自建 | 关键词过滤 | **LLM 深度摘要 + 评分** |
+| 推送逻辑 | 手动查看 | 自定义触发 | 定时推送 | **AI 判断最佳时机** |
+| 用户反馈 | 无 | 无 | 无 | **转发即学习** |
+| 部署难度 | Docker | Docker | GitHub Actions | `pip install` + `hobee demo` |
 
 ---
 
@@ -9,23 +44,32 @@
 ### 30 秒试试看（零配置）
 
 ```bash
-git clone https://github.com/your-org/openclaw-hobby.git
+git clone https://github.com/StriderXOXO/openclaw-hobby.git
 cd openclaw-hobby
 pip install -e .
 hobee demo
-# → 立即看到采集到的中文科技播客
+# → 立即看到采集到的中文科技播客摘要
 ```
 
 ### 5 分钟部署（开始持续采集）
 
 ```bash
-hobee setup                          # 交互式配置
+hobee setup                          # 交互式配置向导
 hobee podcast daemon                 # 启动持续采集（或用 systemd 管理）
 ```
 
-### 进阶：添加更多内容源
+### 按需进阶
 
-每个源独立可选，按需添加：
+| 想要什么 | 怎么做 | 时间 |
+|---------|--------|------|
+| 先看看效果 | `pip install -e . && hobee demo` | 30 秒 |
+| 持续采集 Podcast | `hobee podcast daemon` | 1 分钟 |
+| AI 智能分析 | 设 1 个 `LLM_API_KEY` → `hobee triage podcast` | 2 分钟 |
+| 飞书知识库 + 推送 | `hobee setup` 向导配置 | 10 分钟 |
+| 全套：3 源 + 心跳 + 飞书 | `hobee setup` + systemd 部署 | 30 分钟 |
+
+<details>
+<summary>添加更多内容源</summary>
 
 ```bash
 # Podcast: 免费，零 API Key
@@ -36,7 +80,10 @@ hobee podcast search "科技"
 # YouTube: 需 Google OAuth（运行 scripts/setup.sh 按提示授权）
 ```
 
-### 进阶：LLM 智能分析
+</details>
+
+<details>
+<summary>LLM 智能分析</summary>
 
 ```bash
 # 在 .env 中设置 LLM_API_KEY，支持 Anthropic / DeepSeek / OpenAI 兼容
@@ -44,19 +91,24 @@ hobee triage podcast               # 分析播客内容
 hobee triage youtube               # 分析 YouTube 内容
 ```
 
-### 进阶：飞书知识库
+</details>
+
+<details>
+<summary>飞书知识库</summary>
 
 ```bash
 hobee setup                        # 选择飞书存储，按提示配置
 # 或手动编辑 .env，设置 STORAGE_BACKEND=feishu + 飞书凭证
 ```
 
+</details>
+
 ---
 
-## 系统架构总览
+## 系统架构
 
 ```
-              采集层 (Daemons)              存储层 (StorageBackend)
+              采集层 (Daemons)              存储层 (Storage)
           ┌────────────────────┐         ┌──────────────────────┐
           │  Podcast Daemon    │────────>│  SQLite (默认，零配置) │
           │  YouTube Daemon    │────────>│  或                   │
@@ -66,45 +118,33 @@ hobee setup                        # 选择飞书存储，按提示配置
                                                     │
               分析层 (Triage)                        │
           ┌────────────────────┐                    │
-          │  triage_helper.py  │<───────────────────┘
-          │  LLM 深度分析      │  查询未分析记录
-          │  摘要/亮点/精选原文 │  写回分析结果
-          │  主题标签           │
+          │  LLM 深度分析      │<───────────────────┘
+          │  摘要 / 亮点       │  查询未分析记录
+          │  精选原文 / 标签   │  写回分析结果
           └────────────────────┘
                     │
                     ▼
               决策层 (Heartbeat)
           ┌────────────────────┐
-          │  OpenClaw Agent    │  每 10 分钟唤醒
-          │  读取所有待分享内容 │
-          │  跨兴趣源全局评分   │  ──────> 飞书/Telegram/Discord
+          │  AI Agent          │  每 10 分钟唤醒
+          │  跨源全局评分       │  ──────> 飞书 / Telegram / Discord
           │  用户信号加权       │          推送给用户
           │  时间窗口判断       │
           └────────────────────┘
 
               监控层 (Watchdog)
           ┌────────────────────┐
-          │  服务健康检查       │  3 级检测 (2min/10min/30min)
+          │  3 级健康检测       │  2min / 10min / 30min
           │  自动故障恢复       │  崩溃重启、JSON 修复
-          │  每日运营报告       │  CST 8:00 推送飞书
+          │  每日运营报告       │  CST 8:00 推送
           └────────────────────┘
 ```
 
-**数据流**: 守护进程采集原始内容 → 存储后端持久化 → Triage 用 LLM 深度分析 → Heartbeat 全局评分并主动分享给用户。
+**数据流**: 守护进程采集 → 存储持久化 → LLM 深度分析 → AI 全局评分 → 主动推送给用户
 
 ---
 
-## 核心创新
-
-1. **心跳驱动主动分享** — Agent 每 10 分钟判断「有没有值得分享的 + 现在合不合适」，不是机械定时推送
-2. **跨兴趣源全局评分** — Podcast/YouTube/Twitter 放在一起排序，确保用户收到最值得看的内容
-3. **用户信号反馈循环** — 用户转发一篇文章，系统自动调整兴趣权重
-4. **哑采集 + 智能分析** — Daemon 只做 API 抓取（零成本），LLM 集中在 Triage 和 Heartbeat 层
-5. **可插拔存储** — 默认 SQLite 零配置，可切换飞书/Notion/自定义
-
----
-
-## CLI 命令一览
+## CLI 命令速查
 
 ```bash
 hobee demo                     # 零配置体验
@@ -122,65 +162,22 @@ hobee triage <hobby> --dry-run # 预览待分析内容
 
 ---
 
-## 配置层级
+## 常见问题
 
-| 场景 | 需要什么 | 时间 |
-|------|---------|------|
-| 先看看是啥 | `pip install -e . && hobee demo` | 30 秒 |
-| 只跑 Podcast | 零配置 | 1 分钟 |
-| 加上 LLM 分析 | 设 1 个 `LLM_API_KEY` | 2 分钟 |
-| 完整飞书体验 | `hobee setup` 向导 | 10 分钟 |
-| 3 源 + 心跳 + 飞书 | `hobee setup` + systemd | 30 分钟 |
+**不装 OpenClaw 能用吗？**
+> 能。采集 + LLM 分析完全独立运行。心跳智能推送需要 [OpenClaw](https://github.com/openclaw/openclaw) Agent 运行时。
 
----
+**费用多少？**
+> 内容采集完全免费。LLM 分析按量付费：DeepSeek 约 ¥0.1/条，Claude Haiku 约 $0.01/条。不开 LLM 也能用，只是没有智能摘要。
 
-## 目录结构
+**能加自己的内容源吗？**
+> 能。继承 `BaseDaemon`，实现 `collect_once()` 方法即可。详见 [定制指南](docs/customization.md)。
 
-```
-openclaw-hobby/
-├── hobee/                     # 核心库
-│   ├── __init__.py
-│   ├── cli.py                 # hobee CLI 入口
-│   ├── config.py              # 统一配置 (env > config.json > 默认值)
-│   ├── daemon.py              # BaseDaemon 守护进程基类
-│   ├── logging_utils.py       # 日志工具
-│   └── storage/               # 存储后端
-│       ├── base.py            # StorageBackend ABC
-│       ├── sqlite.py          # SQLite 实现 (默认)
-│       └── feishu.py          # 飞书多维表格实现
-├── daemons/                   # 各兴趣源守护进程
-│   ├── podcast/               # Podcast RSS 监控 + 转录
-│   ├── youtube/               # YouTube 频道监控 + 字幕
-│   └── twitter/               # Twitter 账号监控
-├── triage/                    # LLM 内容分析
-│   └── triage_helper.py
-├── agent/                     # OpenClaw Agent 指令 (含 {{占位符}})
-│   ├── HEARTBEAT.md           # 心跳决策 7 步流程
-│   ├── TOOLS.md               # 可用工具清单
-│   └── SOUL.md                # Agent 人格设定
-├── watchdog/                  # 健康监控
-├── config/                    # 配置模板
-├── systemd/                   # systemd 服务单元
-├── scripts/                   # 安装 / 部署 / 工具脚本
-│   ├── setup.sh               # 一键安装
-│   └── generate-agent-files.sh # 自动填充 agent 占位符
-├── docs/                      # 详细文档
-├── pyproject.toml             # Python 包定义
-├── .env.example               # 环境变量模板 (分层标注)
-└── README.md
-```
+**支持 Windows / Docker 吗？**
+> 目前需要 Linux（systemd 管理服务）。Docker 支持 coming soon。macOS 可用于开发和 demo。
 
----
-
-## 前置依赖
-
-| 依赖 | 版本 | 必需？ | 用途 |
-|------|------|--------|------|
-| Python | 3.10+ | 是 | 核心运行 |
-| requests + feedparser | * | 是 | 基础采集 (pip install -e .) |
-| [OpenClaw](https://github.com/openclaw/openclaw) | 最新版 | 心跳/Cron 需要 | Agent 运行时 |
-| LLM API | Anthropic 兼容 | 可选 | Triage 分析 |
-| 飞书应用 | - | 可选 | 存储 + 推送 |
+**和 RSS 阅读器有什么区别？**
+> RSS 阅读器是被动的——你去刷它。openclaw-hobby 是主动的——它来找你，而且只在合适的时间推送最值得看的内容。
 
 ---
 
@@ -192,10 +189,66 @@ openclaw-hobby/
 | [心跳详解](docs/heartbeat-deep-dive.md) | 7 步决策流程、全局评分、用户信号 |
 | [部署指南](docs/deployment.md) | 单机/多机部署、systemd 配置 |
 | [定制指南](docs/customization.md) | 添加新兴趣源、替换存储后端 |
-| [踩坑记录](docs/lessons-learned.md) | 经验教训 |
+| [踩坑记录](docs/lessons-learned.md) | 实战经验教训 |
 
 ---
+
+## 目录结构
+
+<details>
+<summary>点击展开</summary>
+
+```
+openclaw-hobby/
+├── hobee/                     # 核心库
+│   ├── cli.py                 # hobee CLI 入口
+│   ├── config.py              # 统一配置 (env > config.json > 默认值)
+│   ├── daemon.py              # BaseDaemon 守护进程基类
+│   └── storage/               # 可插拔存储后端
+│       ├── base.py            # StorageBackend ABC
+│       ├── sqlite.py          # SQLite 实现 (默认)
+│       └── feishu.py          # 飞书多维表格实现
+├── daemons/                   # 各兴趣源守护进程
+│   ├── podcast/               # Podcast RSS 监控 + 转录
+│   ├── youtube/               # YouTube 频道监控 + 字幕
+│   └── twitter/               # Twitter 账号监控
+├── triage/                    # LLM 内容分析
+├── agent/                     # AI Agent 指令模板 (含 {{占位符}})
+├── watchdog/                  # 健康监控 + 自动恢复
+├── config/                    # 配置模板
+├── systemd/                   # systemd 服务单元
+├── scripts/                   # 安装 / 部署脚本
+├── tests/                     # 单元测试 (91 个)
+├── docs/                      # 详细文档
+└── .env.example               # 环境变量模板
+```
+
+</details>
+
+---
+
+## 前置依赖
+
+| 依赖 | 必需？ | 说明 |
+|------|--------|------|
+| Python 3.9+ | 是 | 核心运行环境 |
+| requests + feedparser | 是 | `pip install -e .` 自动安装 |
+| [OpenClaw](https://github.com/openclaw/openclaw) | 心跳推送需要 | AI Agent 运行时 |
+| LLM API | 可选 | 任何 Anthropic Messages API 兼容服务 |
+| 飞书企业应用 | 可选 | 知识库存储 + 消息推送 |
+
+---
+
+## Contributing
+
+欢迎贡献！请查看 [CONTRIBUTING.md](CONTRIBUTING.md) 了解如何参与。
 
 ## License
 
 [MIT](LICENSE)
+
+---
+
+如果这个项目帮你从信息焦虑中解脱了一点点，请点个 Star 支持一下！
+
+有问题或建议？欢迎 [提 Issue](https://github.com/StriderXOXO/openclaw-hobby/issues)。

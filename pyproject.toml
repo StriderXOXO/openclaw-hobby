@@ -1,10 +1,12 @@
 [project]
 name = "openclaw-hobby"
 version = "0.1.0"
-description = "基于 OpenClaw 的自主兴趣内容策展系统"
+description = "Cure your info anxiety — AI monitors Podcasts/YouTube/Twitter 24/7, summarizes, and shares what matters at the right time"
 readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.9"
+keywords = ["rss", "podcast", "automation", "ai", "content-curation", "llm", "agent"]
+authors = [{name = "StriderXOXO"}]
 dependencies = [
     "requests>=2.28",
     "feedparser>=6.0",
@@ -18,6 +20,11 @@ all = ["google-auth-oauthlib", "google-api-python-client"]
 
 [project.scripts]
 hobee = "hobee.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/StriderXOXO/openclaw-hobby"
+Repository = "https://github.com/StriderXOXO/openclaw-hobby"
+Documentation = "https://github.com/StriderXOXO/openclaw-hobby/tree/main/docs"
 
 [build-system]
 requires = ["setuptools>=68.0"]

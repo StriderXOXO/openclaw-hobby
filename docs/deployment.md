@@ -39,7 +39,7 @@ openclaw --version
 
 ```bash
 cd /root
-git clone https://github.com/your-org/openclaw-hobby.git
+git clone https://github.com/StriderXOXO/openclaw-hobby.git
 cd openclaw-hobby
 ```
 
