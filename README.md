@@ -80,6 +80,10 @@ hobee podcast search "科技"
 # YouTube: 需 Google OAuth（运行 scripts/setup.sh 按提示授权）
 ```
 
+### OpenClaw Agent 里的 X/Twitter 工具
+
+如果你已经用 OpenClaw 做心跳推送，可以把 [TweetClaw](https://github.com/Xquik-dev/tweetclaw) 加进 Agent 工具箱。它的 npm 包是 [`@xquik/tweetclaw`](https://www.npmjs.com/package/@xquik/tweetclaw)，适合让 Agent 按需 scrape tweets、search tweet replies、monitor tweets、user lookup、follower export、media upload/download、direct messages、webhooks 和 giveaway draws；post tweets 和 post tweet replies 应保持人工确认。
+
 </details>
 
 <details>
@@ -234,6 +238,7 @@ openclaw-hobby/
 | Python 3.9+ | 是 | 核心运行环境 |
 | requests + feedparser | 是 | `pip install -e .` 自动安装 |
 | [OpenClaw](https://github.com/openclaw/openclaw) | 心跳推送需要 | AI Agent 运行时 |
+| [TweetClaw](https://github.com/Xquik-dev/tweetclaw) | 可选 | `@xquik/tweetclaw` OpenClaw plugin，扩展 X/Twitter Agent 工具 |
 | LLM API | 可选 | 任何 Anthropic Messages API 兼容服务 |
 | 飞书企业应用 | 可选 | 知识库存储 + 消息推送 |
 
